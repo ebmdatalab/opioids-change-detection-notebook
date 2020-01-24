@@ -147,3 +147,16 @@ def sparkline_table(df, column, subset=None):
     df = df.round(decimals=2)
     series['one'] = 1
     return series
+
+def filtered_sparkline(df, name, measure):
+    data = pd.read_csv('data/{}/bq_cache.csv'.format(name),index_col='code')
+    data['rate'] = data['numerator'] / data['denominator']
+    data = data.sort_values('month')
+
+    filtered = df.loc[measure]
+    mask = filtered['is.intlev.initlev'] > filtered['is.intlev.initlev'].quantile(0.8)
+    filtered = filtered.loc[mask]
+    filtered = filtered.sort_values('is.intlev.levdprop', ascending=False).head(5)
+
+    ser = sparkline_table(data, 'rate', subset=filtered.index)
+    return filtered[['is.tfirst.big','is.intlev.levdprop']].join(ser)
