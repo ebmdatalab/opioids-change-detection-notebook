@@ -1,4 +1,4 @@
-FROM ebmdatalab/datalab-jupyter:python3.8.1-0ba7fd7eb2604eaebd39875f60988de3470ca727
+FROM ebmdatalab/datalab-jupyter:python3.8.1-9d68263e8bf13dc09453353a6988c46f0773c1e4
 
 # Set up jupyter environment
 ENV MAIN_PATH=/home/app/notebook
@@ -7,8 +7,6 @@ ENV MAIN_PATH=/home/app/notebook
 COPY requirements.txt /tmp/
 # Hack until this is fixed https://github.com/jazzband/pip-tools/issues/823
 USER root
-RUN apt-get install -y r-base
-RUN usermod -G staff app
 RUN chmod 644 /tmp/requirements.txt
 USER app
 RUN pip install --requirement /tmp/requirements.txt
@@ -18,7 +16,7 @@ EXPOSE 8888
 # This is a custom ipython kernel that allows us to manipulate
 # `sys.path` in a consistent way between normal and pytest-with-nbval
 # invocations
-COPY config/kernel.json /tmp/
-RUN jupyter kernelspec install /tmp/ --user --name="python3"
+COPY config/kernel.json /tmp/kernel_with_custom_path/kernel.json
+RUN jupyter kernelspec install /tmp/kernel_with_custom_path/ --user --name="python3"
 
 CMD cd ${MAIN_PATH} && PYTHONPATH=${MAIN_PATH} jupyter lab --config=config/jupyter_notebook_config.py
