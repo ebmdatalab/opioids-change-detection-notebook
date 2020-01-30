@@ -29,6 +29,7 @@ from lib.outliers import *  #This is copied into the local folder from a branch 
 opioids_class = chg.ChangeDetection('ccg_data_opioid%',
                                     measure=True,
                                     direction='down',
+                                    use_cache=True,
                                     overwrite=False,
                                     verbose=False,
                                     draw_figures='no')
