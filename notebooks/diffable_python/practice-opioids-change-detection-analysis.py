@@ -38,6 +38,43 @@ opioids_class.run()
 opioids = opioids_class.concatenate_outputs()
 opioids.head()
 
+# ### Get open practices list to filter out closed practices
+
+query = """
+SELECT
+  DISTINCT code
+FROM
+  ebmdatalab.hscic.practices
+WHERE
+  status_code = "A"
+"""
+open_practices = bq.cached_read(query,csv_path='data/open_practices.csv')
+open_practices.head()
+
+# ### Get practices with a small list size to filter them out 
+
+query = """
+SELECT
+  DISTINCT practice
+FROM
+  ebmdatalab.hscic.practice_statistics
+WHERE
+  total_list_size < 2000
+"""
+small_list_size = bq.cached_read(query,csv_path='data/small_list_size.csv')
+small_list_size.head()
+
+# ### Remove small list sizes and closed/dormant practices
+
+print(len(opioids))
+mask = opioids.index.get_level_values(1).isin(open_practices['code'])
+opioids = opioids.loc[mask]
+print(len(opioids))
+mask = opioids.index.get_level_values(1).isin(small_list_size['practice'])
+opioids = opioids.loc[~mask]
+print(len(opioids))
+opioids.head()
+
 # ## Total OME
 
 filtered_sparkline(opioids,
@@ -170,8 +207,8 @@ ax.legend_.remove()
 
 # fit subplots and save fig
 fig.set_size_inches(w=12,h=14)
-fig.savefig('data/practice_data_opioid/ome.png',
-            format='png', dpi=300,bbox_inches='tight')
+#fig.savefig('data/practice_data_opioid/ome.png',
+#            format='png', dpi=300,bbox_inches='tight')
 # -
 
 # ## High dose opioids per 1000 patients
@@ -301,5 +338,5 @@ ax.legend_.remove()
 
 # fit subplots and save fig
 fig.set_size_inches(w=12,h=14)
-fig.savefig('data/practice_data_opioid/ome.png',
-            format='png', dpi=300,bbox_inches='tight')
+#fig.savefig('data/practice_data_opioid/ome.png',
+#            format='png', dpi=300,bbox_inches='tight')

@@ -152,11 +152,21 @@ def filtered_sparkline(df, name, measure):
     data = pd.read_csv('data/{}/bq_cache.csv'.format(name),index_col='code')
     data['rate'] = data['numerator'] / data['denominator']
     data = data.sort_values('month')
-
+   
     filtered = df.loc[measure]
+    
+    #pick entities that start high
     mask = filtered['is.intlev.initlev'] > filtered['is.intlev.initlev'].quantile(0.8)
     filtered = filtered.loc[mask]
-    filtered = filtered.sort_values('is.intlev.levdprop', ascending=False).head(5)
-
+    
+    #remove entities with a big spike
+    mean_std_max = data['rate'].groupby(['code']).agg(['mean','std','max'])
+    mask = mean_std_max['max'] < (mean_std_max['mean'] + (1.96*mean_std_max['std']))
+    filtered = filtered.loc[mask]
+    
+    #drop duplicates
+    filtered = filtered.loc[~filtered.index.duplicated(keep='first')]
+    
+    filtered = filtered.sort_values('is.intlev.levdprop', ascending=False).head(10)
     ser = sparkline_table(data, 'rate', subset=filtered.index)
     return filtered[['is.tfirst.big','is.intlev.levdprop']].join(ser)
