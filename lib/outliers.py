@@ -3,6 +3,7 @@ import base64
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from ebmdatalab import bq
 from IPython.display import HTML
 # reset to matplotlib defaults rather than seaborn ones
 plt.rcdefaults()
@@ -168,5 +169,40 @@ def filtered_sparkline(df, name, measure):
     filtered = filtered.loc[~filtered.index.duplicated(keep='first')]
     
     filtered = filtered.sort_values('is.intlev.levdprop', ascending=False).head(10)
-    ser = sparkline_table(data, 'rate', subset=filtered.index)
-    return filtered[['is.tfirst.big','is.intlev.levdprop']].join(ser)
+    plot_series = sparkline_table(data, 'rate', subset=filtered.index)
+
+    #get entity names and turn into link
+    entity_type = name.split('_')[0]
+    entity_names = get_entity_names(entity_type)
+    entity_names['code'] = entity_names.index
+    measure_name = measure.split('_')[-1]
+    entity_names['link'] = entity_names[['code','name']].apply(lambda x:
+        '<a href="https://openprescribing.net/measure/{0}/ccg/{1}/">{2}</a>'.format(
+            measure_name,
+            x[0],
+            x[1]
+            ),axis=1)
+
+    #create output table
+    out_table = filtered[['is.tfirst.big','is.intlev.levdprop']]
+    out_table = out_table.join(entity_names['link'])
+    out_table = out_table.join(plot_series)
+    out_table = out_table.rename(columns={
+        "is.tfirst.big": "Month when change detected",
+         "is.intlev.levdprop": "Measured proportional change"
+         })
+    return out_table.set_index('link')
+
+
+def get_entity_names(entity_type):
+    query = """
+    SELECT
+      DISTINCT code,
+      name
+    FROM
+      ebmdatalab.hscic.ccgs
+    WHERE
+      name IS NOT NULL
+    """.format(entity_type)
+    entity_names = bq.cached_read(query,csv_path='data/ccg_names.csv')
+    return entity_names.set_index('code')
