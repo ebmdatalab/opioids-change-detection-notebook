@@ -177,8 +177,9 @@ def filtered_sparkline(df, name, measure):
     entity_names['code'] = entity_names.index
     measure_name = measure.split('_')[-1]
     entity_names['link'] = entity_names[['code','name']].apply(lambda x:
-        '<a href="https://openprescribing.net/measure/{0}/ccg/{1}/">{2}</a>'.format(
+        '<a href="https://openprescribing.net/measure/{0}/{1}/{2}/">{3}</a>'.format(
             measure_name,
+            entity_type,
             x[0],
             x[1]
             ),axis=1)
@@ -200,7 +201,7 @@ def get_entity_names(entity_type):
       DISTINCT code,
       name
     FROM
-      ebmdatalab.hscic.ccgs
+      ebmdatalab.hscic.{}s
     WHERE
       name IS NOT NULL
     """.format(entity_type)
