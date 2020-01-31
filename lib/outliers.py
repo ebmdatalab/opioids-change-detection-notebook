@@ -205,5 +205,5 @@ def get_entity_names(entity_type):
     WHERE
       name IS NOT NULL
     """.format(entity_type)
-    entity_names = bq.cached_read(query,csv_path='data/ccg_names.csv')
+    entity_names = bq.cached_read(query,csv_path='data/{}_names.csv'.format(entity_type))
     return entity_names.set_index('code')
