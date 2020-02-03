@@ -16,6 +16,8 @@
 
 # ## Import libraries required for analysis
 
+# NBVAL_IGNORE_OUTPUT
+# ^this is a magic comment to work around this issue https://github.com/ebmdatalab/custom-docker/issues/10
 from change_detection import functions as chg
 from lib.outliers import *  #This is copied into the local folder from a branch ebmdatalab pandas library - it will be placed in its own repo to install at a later dat
 
@@ -23,6 +25,8 @@ from lib.outliers import *  #This is copied into the local folder from a branch 
 # - looks for changes in time-series data
 # - as described in https://www.bmj.com/content/367/bmj.l5205
 
+# NBVAL_IGNORE_OUTPUT
+# ^this is a magic comment to work around this issue https://github.com/ebmdatalab/custom-docker/issues/10
 opioids_class = chg.ChangeDetection('ccg_data_opioid%',
                                     measure=True,
                                     direction='down',
