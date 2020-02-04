@@ -151,6 +151,7 @@ def sparkline_table(df, column, subset=None):
 
 def filtered_sparkline(df, name, measure):
     data = pd.read_csv('data/{}/bq_cache.csv'.format(name),index_col='code')
+    data['month'] = pd.to_datetime(data['month'])
     data['rate'] = data['numerator'] / data['denominator']
     data = data.sort_values('month')
    
@@ -183,6 +184,10 @@ def filtered_sparkline(df, name, measure):
             x[0],
             x[1]
             ),axis=1)
+
+    #change month integer to dates
+    filtered['min_month'] = data['month'].min()
+    filtered['is.tfirst.big'] = filtered.apply(lambda x: x['min_month'] + pd.DateOffset(months = x['is.tfirst.big']), axis=1)
 
     #create output table
     out_table = filtered[['is.tfirst.big','is.intlev.levdprop']]
