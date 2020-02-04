@@ -187,7 +187,10 @@ def filtered_sparkline(df, name, measure):
 
     #change month integer to dates
     filtered['min_month'] = data['month'].min()
-    filtered['is.tfirst.big'] = filtered.apply(lambda x: x['min_month'] + pd.DateOffset(months = x['is.tfirst.big']), axis=1)
+    filtered['is.tfirst.big'] = filtered.apply(lambda x:
+        x['min_month']
+        + pd.DateOffset(months = x['is.tfirst.big']-1 ),
+        axis=1)
 
     #create output table
     out_table = filtered[['is.tfirst.big','is.intlev.levdprop']]
