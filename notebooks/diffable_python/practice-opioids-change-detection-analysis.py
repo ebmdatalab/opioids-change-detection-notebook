@@ -22,6 +22,7 @@
 from change_detection import functions as chg
 from ebmdatalab import bq
 from lib.outliers import *  #This is copied into the local folder from a branch ebmdatalab pandas library - it will be placed in its own repo to install at a later dat
+import numpy as np
 # -
 
 # ## Run change detection for the 3 OpenPrescribing opioid measures
@@ -90,22 +91,51 @@ opioids.head()
 # ## Total Oral Morphine Equivalence
 # https://openprescribing.net/measure/opioidome
 
-filtered_sparkline(opioids,
+OME_table, all_OME_changes = filtered_sparkline(opioids,
                    'practice_data_opioid/practice_data_opioidome',
                    'practice_data_opioidome')
+
+OME_table
 
 # ## High dose opioids as percentage regular opioids
 
 # https://openprescribing.net/measure/opioidspercent
 
-filtered_sparkline(opioids,
+highperc_table, all_highperc_changes = filtered_sparkline(opioids,
                    'practice_data_opioid/practice_data_opioidspercent',
                    'practice_data_opioidspercent')
+
+highperc_table
 
 # ## High dose opioids per 1000 patients
 
 # https://openprescribing.net/measure/opioidper1000
 
-filtered_sparkline(opioids,
+high1000_table, all_high1000_changes = filtered_sparkline(opioids,
                    'practice_data_opioid/practice_data_opioidper1000',
                    'practice_data_opioidper1000')
+
+high1000_table
+
+# ## Summary statistics
+#
+# Summary statistics shown for all practices demonstrating a decrease.
+
+# +
+all_OME_changes["measure"] = "Total oral morphine equivalence"
+all_highperc_changes["measure"] = "High dose opioids as percentage regular opioids"
+all_high1000_changes["measure"] = "High dose opioids per 1000 patients"
+
+all_changes = all_OME_changes.append(all_highperc_changes).append(all_high1000_changes)
+all_changes = all_changes[~all_changes.isin([np.nan, np.inf, -np.inf]).any(1)]
+all_decreases = all_changes[all_changes['is.intlev.levdprop']>0]
+
+practice_decreases_summary = all_decreases.groupby("measure")["is.intlev.levdprop"].describe()
+practice_decreases_summary['IQR'] = practice_decreases_summary['75%'] - practice_decreases_summary['25%']
+practice_decreases_summary.rename( columns={'50%' : 'median'}, inplace=True)
+
+practice_decreases_summary[['median','IQR','min', 'max']].multiply(100).round(2)
+
+# -
+
+

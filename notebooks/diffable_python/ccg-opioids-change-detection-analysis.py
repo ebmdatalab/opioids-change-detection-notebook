@@ -51,22 +51,51 @@ opioids.head()
 # ## Total Oral Morphine Equivalence
 # https://openprescribing.net/measure/opioidome
 
-filtered_sparkline(opioids,
+OME_table, all_OME_changes  = filtered_sparkline(opioids,
                    'ccg_data_opioid/ccg_data_opioidome',
                    'ccg_data_opioidome')
+
+OME_table
 
 # ## High dose opioids as percentage regular opioids
 
 # https://openprescribing.net/measure/opioidspercent
 
-filtered_sparkline(opioids,
+highperc_table, all_highperc_changes = filtered_sparkline(opioids,
                    'ccg_data_opioid/ccg_data_opioidspercent',
                    'ccg_data_opioidspercent')
+
+
+highperc_table
 
 # ## High dose opioids per 1000 patients
 
 # https://openprescribing.net/measure/opioidper1000
 
-filtered_sparkline(opioids,
+high1000_table, all_high1000_changes = filtered_sparkline(opioids,
                    'ccg_data_opioid/ccg_data_opioidper1000',
                    'ccg_data_opioidper1000')
+
+high1000_table
+
+# ## Summary statistics
+#
+# Summary statistics shown for all CCGs demonstrating a decrease.
+
+# +
+all_OME_changes["measure"] = "Total oral morphine equivalence"
+all_highperc_changes["measure"] = "High dose opioids as percentage regular opioids"
+all_high1000_changes["measure"] = "High dose opioids per 1000 patients"
+
+all_changes = all_OME_changes.append(all_highperc_changes).append(all_high1000_changes)
+all_changes = all_changes[~all_changes.isin([np.nan, np.inf, -np.inf]).any(1)]
+all_decreases = all_changes[all_changes['is.intlev.levdprop']>0]
+
+CCG_decreases_summary = all_decreases.groupby("measure")["is.intlev.levdprop"].describe()
+CCG_decreases_summary['IQR'] = CCG_decreases_summary['75%'] - CCG_decreases_summary['25%']
+CCG_decreases_summary.rename( columns={'50%' : 'median'}, inplace=True)
+
+CCG_decreases_summary[['median','IQR','min', 'max']].multiply(100).round(2)
+# -
+
+
