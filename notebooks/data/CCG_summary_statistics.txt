@@ -1,0 +1,4 @@
+measure	median	IQR	min	max
+High dose opioids as percentage regular opioids	19.03	12.03	3.61	41.51
+High dose opioids per 1000 patients	22.23	12.82	0.98	45.4
+Total oral morphine equivalence	15.07	6.91	9.03	32.79
