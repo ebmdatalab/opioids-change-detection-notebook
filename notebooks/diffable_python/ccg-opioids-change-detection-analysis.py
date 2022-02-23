@@ -103,6 +103,4 @@ CCG_decreases_summary_tosave['max'] = (100 * CCG_decreases_summary_tosave['max']
 CCG_decreases_summary_tosave
 # -
 
-CCG_decreases_summary_tosave.to_csv('data/CCG_summary_statistics.csv')
-
 

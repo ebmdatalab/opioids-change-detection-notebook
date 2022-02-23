@@ -142,6 +142,4 @@ practice_decreases_summary_tosave['max'] = (100 * practice_decreases_summary_tos
 practice_decreases_summary_tosave
 # -
 
-practice_decreases_summary_tosave.to_csv('data/practice_summary_statistics.csv')
-
 
