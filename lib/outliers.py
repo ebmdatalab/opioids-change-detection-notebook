@@ -156,6 +156,15 @@ def filtered_sparkline(df, name, measure):
     data = data.sort_values('month')
    
     filtered = df.loc[measure]
+
+    all_changes = filtered
+    all_changes = filtered.dropna(subset=['is.tfirst.big'])
+    all_changes['min_month'] = data['month'].min()
+    
+    all_changes['is.tfirst.big'] = all_changes.apply(lambda x:
+        x['min_month']
+        + pd.DateOffset(months = x['is.tfirst.big']-1 ),
+        axis=1)
     
     #pick entities that start high
     mask = filtered['is.intlev.initlev'] > filtered['is.intlev.initlev'].quantile(0.8)
@@ -200,7 +209,8 @@ def filtered_sparkline(df, name, measure):
         "is.tfirst.big": "Month when change detected",
          "is.intlev.levdprop": "Measured proportional change"
          })
-    return out_table.set_index('link')
+    
+    return out_table.set_index('link'), all_changes
 
 
 def get_entity_names(entity_type):
