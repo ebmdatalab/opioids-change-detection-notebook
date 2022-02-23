@@ -95,7 +95,11 @@ CCG_decreases_summary = all_decreases.groupby("measure")["is.intlev.levdprop"].d
 CCG_decreases_summary['IQR'] = CCG_decreases_summary['75%'] - CCG_decreases_summary['25%']
 CCG_decreases_summary.rename( columns={'50%' : 'median'}, inplace=True)
 
-CCG_decreases_summary_tosave = CCG_decreases_summary[['median','IQR','min', 'max']].multiply(100).round(2)
+CCG_decreases_summary_tosave = CCG_decreases_summary[['count', 'median','IQR','min', 'max']]
+CCG_decreases_summary_tosave['median'] = (100 * CCG_decreases_summary_tosave['median']).round(1)
+CCG_decreases_summary_tosave['IQR'] = (100 * CCG_decreases_summary_tosave['IQR']).round(1)
+CCG_decreases_summary_tosave['min'] = (100 * CCG_decreases_summary_tosave['min']).round(1)
+CCG_decreases_summary_tosave['max'] = (100 * CCG_decreases_summary_tosave['max']).round(1)
 CCG_decreases_summary_tosave
 # -
 

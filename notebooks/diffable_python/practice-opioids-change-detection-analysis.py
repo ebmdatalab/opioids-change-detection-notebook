@@ -134,7 +134,11 @@ practice_decreases_summary = all_decreases.groupby("measure")["is.intlev.levdpro
 practice_decreases_summary['IQR'] = practice_decreases_summary['75%'] - practice_decreases_summary['25%']
 practice_decreases_summary.rename( columns={'50%' : 'median'}, inplace=True)
 
-practice_decreases_summary_tosave = practice_decreases_summary[['median','IQR','min', 'max']].multiply(100).round(2)
+practice_decreases_summary_tosave = practice_decreases_summary[['count', 'median','IQR','min', 'max']]
+practice_decreases_summary_tosave['median'] = (100 * practice_decreases_summary_tosave['median']).round(1)
+practice_decreases_summary_tosave['IQR'] = (100 * practice_decreases_summary_tosave['IQR']).round(1)
+practice_decreases_summary_tosave['min'] = (100 * practice_decreases_summary_tosave['min']).round(1)
+practice_decreases_summary_tosave['max'] = (100 * practice_decreases_summary_tosave['max']).round(1)
 practice_decreases_summary_tosave
 # -
 
