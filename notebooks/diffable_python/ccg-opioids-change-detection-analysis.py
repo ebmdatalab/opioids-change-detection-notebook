@@ -35,6 +35,7 @@
 # ^this is a magic comment to work around this issue https://github.com/ebmdatalab/custom-docker/issues/10
 from change_detection import functions as chg
 from lib.outliers import *  #This is copied into the local folder from a branch ebmdatalab pandas library - it will be placed in its own repo to install at a later dat
+import numpy as np
 
 # ## Run change detection for the 3 OpenPrescribing opioid measures
 # - looks for changes in time-series data
@@ -76,9 +77,11 @@ display( OME_table )
 
 # https://openprescribing.net/measure/opioidspercent
 
+# +
 highperc_table, all_highperc_changes = filtered_sparkline(opioids,
                    'ccg_data_opioid/ccg_data_opioidspercent',
                    'ccg_data_opioidspercent')
+# -
 
 
 display( highperc_table )
@@ -117,6 +120,6 @@ CCG_decreases_summary_tosave['min'] = (100 * CCG_decreases_summary_tosave['min']
 CCG_decreases_summary_tosave['max'] = (100 * CCG_decreases_summary_tosave['max']).round(1)
 
 display( CCG_decreases_summary_tosave )
-# -
+# +
 
 

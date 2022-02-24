@@ -156,6 +156,6 @@ practice_decreases_summary_tosave['min'] = (100 * practice_decreases_summary_tos
 practice_decreases_summary_tosave['max'] = (100 * practice_decreases_summary_tosave['max']).round(1)
 
 display( practice_decreases_summary_tosave )
-# -
+# +
 
 
