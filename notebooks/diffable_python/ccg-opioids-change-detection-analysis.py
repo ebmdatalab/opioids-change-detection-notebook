@@ -55,7 +55,7 @@ OME_table, all_OME_changes  = filtered_sparkline(opioids,
                    'ccg_data_opioid/ccg_data_opioidome',
                    'ccg_data_opioidome')
 
-OME_table
+display( OME_table )
 
 # ## High dose opioids as percentage regular opioids
 
@@ -66,7 +66,7 @@ highperc_table, all_highperc_changes = filtered_sparkline(opioids,
                    'ccg_data_opioidspercent')
 
 
-highperc_table
+display( highperc_table )
 
 # ## High dose opioids per 1000 patients
 
@@ -76,7 +76,7 @@ high1000_table, all_high1000_changes = filtered_sparkline(opioids,
                    'ccg_data_opioid/ccg_data_opioidper1000',
                    'ccg_data_opioidper1000')
 
-high1000_table
+display( high1000_table )
 
 # ## Summary statistics
 #
@@ -100,7 +100,8 @@ CCG_decreases_summary_tosave['median'] = (100 * CCG_decreases_summary_tosave['me
 CCG_decreases_summary_tosave['IQR'] = (100 * CCG_decreases_summary_tosave['IQR']).round(1)
 CCG_decreases_summary_tosave['min'] = (100 * CCG_decreases_summary_tosave['min']).round(1)
 CCG_decreases_summary_tosave['max'] = (100 * CCG_decreases_summary_tosave['max']).round(1)
-CCG_decreases_summary_tosave
+
+display( CCG_decreases_summary_tosave )
 # -
 
 
