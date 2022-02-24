@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -13,6 +14,20 @@
 #     language: python
 #     name: python3
 # ---
+
+# # Identifying successful interventions (practices) in opioid prescribing data
+
+# This notebook contains methodology and results of an analysis of opioid prescribing data. The practices with the ten largest reductions in opioid prescribing are shown here, but it is also possible to access the most recent (last five years) results for any practice or CCG via the [OpenPrescribing.net](OpenPrescribing.net) website.
+#
+# To find an organisation’s data for any of the three opioid measures use in this analysis, navigate to the specific measure’s landing page. For the measures described in this notebook, these are:
+#
+# - [Total oral morphine equivalence](https://openprescribing.net/measure/opioidome/)
+# - [High dose opioids as percentage regular opioids](https://openprescribing.net/measure/opioidspercent/)
+# - [High dose opioids per 1000 patients](https://openprescribing.net/measure/opioidper1000/)
+#
+# Decile plots for all current CCGs are available on the measure landing page; specific CCGs can be identified via a text search in your browser. To view similar decile plots for a practice, click the “Split the measure into chargers for individual practice” link under the parent CCG.
+#
+# Alternatively, summary results can be obtained for more than one organisation at once by selecting “View this measure on the analyse page” (under “Explore”) on the measure’s landing page (10–12); this will launch a new analysis, pre-loaded with the relevant drugs or BNF sections. Any number of organisations (CCGs or practices) can then be selected by typing code or text into the “highlighting” box; clicking on the “Show me the data!” button will launch this analysis and display the results as a histogram, time series or as a choropleth map. All plots and raw data are available for download.
 
 # ## Import libraries required for analysis
 
@@ -95,7 +110,7 @@ OME_table, all_OME_changes = filtered_sparkline(opioids,
                    'practice_data_opioid/practice_data_opioidome',
                    'practice_data_opioidome')
 
-OME_table
+display( OME_table )
 
 # ## High dose opioids as percentage regular opioids
 
@@ -105,7 +120,7 @@ highperc_table, all_highperc_changes = filtered_sparkline(opioids,
                    'practice_data_opioid/practice_data_opioidspercent',
                    'practice_data_opioidspercent')
 
-highperc_table
+display( highperc_table )
 
 # ## High dose opioids per 1000 patients
 
@@ -115,7 +130,7 @@ high1000_table, all_high1000_changes = filtered_sparkline(opioids,
                    'practice_data_opioid/practice_data_opioidper1000',
                    'practice_data_opioidper1000')
 
-high1000_table
+display( high1000_table )
 
 # ## Summary statistics
 #
@@ -139,7 +154,8 @@ practice_decreases_summary_tosave['median'] = (100 * practice_decreases_summary_
 practice_decreases_summary_tosave['IQR'] = (100 * practice_decreases_summary_tosave['IQR']).round(1)
 practice_decreases_summary_tosave['min'] = (100 * practice_decreases_summary_tosave['min']).round(1)
 practice_decreases_summary_tosave['max'] = (100 * practice_decreases_summary_tosave['max']).round(1)
-practice_decreases_summary_tosave
+
+display( practice_decreases_summary_tosave )
 # -
 
 
