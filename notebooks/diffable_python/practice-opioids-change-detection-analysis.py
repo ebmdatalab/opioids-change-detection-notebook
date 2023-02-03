@@ -94,8 +94,6 @@ print( f"Number of practices that we identify as open (practice_data_opioidsperc
 
 # -
 
-
-
 opioids = opioids.loc[mask]
 #print(len(opioids))
 
@@ -109,13 +107,14 @@ print( f"Number of practices that we identify as open AND with a small list size
 
 opioids = opioids.loc[~mask]
 
-
-# +
-#print(len(opioids))
-#opioids.head()
 # -
 
-len(opioids.loc["practice_data_opioidome",:])
+print( f"Unique by name (practice_data_opioidome): {opioids.loc['practice_data_opioidome',:].reset_index().name.nunique()}" )
+print( f"Unique by name (practice_data_opioidper1000): {opioids.loc['practice_data_opioidper1000',:].reset_index().name.nunique()}" )
+print( f"Unique by name (practice_data_opioidspercent): {opioids.loc['practice_data_opioidspercent',:].reset_index().name.nunique()}" )
+
+
+opioids.reset_index().name.nunique()
 
 # # Results
 # These are filtered:
@@ -150,3 +149,5 @@ filtered_sparkline(opioids,
 filtered_sparkline(opioids,
                    'practice_data_opioid/practice_data_opioidper1000',
                    'practice_data_opioidper1000')
+
+
