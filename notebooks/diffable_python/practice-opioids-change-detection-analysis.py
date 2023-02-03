@@ -56,6 +56,8 @@ WHERE
 open_practices = bq.cached_read(query,csv_path='data/open_practices.csv')
 open_practices.head()
 
+open_practices.size
+
 # ### Get practices with a small list size to filter them out 
 
 query = """
@@ -69,16 +71,51 @@ WHERE
 small_list_size = bq.cached_read(query,csv_path='data/small_list_size.csv')
 small_list_size.head()
 
+small_list_size.size
+
 # ### Remove small list sizes and closed/dormant practices
 
-print(len(opioids))
+opioids_saved = opioids
+
+opioids.index.get_level_values(0).unique()
+
+#print(len(opioids))
+print(f"practice_data_opioidome: {len(opioids.loc['practice_data_opioidome',:])}")
+print(f"practice_data_opioidper1000: {len(opioids.loc['practice_data_opioidper1000',:])}")
+print(f"practice_data_opioidspercent: {len(opioids.loc['practice_data_opioidspercent',:])}")
+
+# +
+
 mask = opioids.index.get_level_values(1).isin(open_practices['code'])
+print( f"Number of open practices (from input file): {open_practices.size}" )
+print( f"Number of practices that we identify as open (practice_data_opioidome): {len(opioids[mask].loc['practice_data_opioidome',:])}" )
+print( f"Number of practices that we identify as open (practice_data_opioidper1000): {len(opioids[mask].loc['practice_data_opioidper1000',:])}" )
+print( f"Number of practices that we identify as open (practice_data_opioidspercent): {len(opioids[mask].loc['practice_data_opioidspercent',:])}" )
+
+# -
+
+
+
 opioids = opioids.loc[mask]
-print(len(opioids))
+#print(len(opioids))
+
+
+# +
 mask = opioids.index.get_level_values(1).isin(small_list_size['practice'])
+print( f"Number of small practices (from input file): {small_list_size.size}" )
+print( f"Number of practices that we identify as open AND with a small list size (practice_data_opioidome): {len(opioids[~mask].loc['practice_data_opioidome',:])}" )
+print( f"Number of practices that we identify as open AND with a small list size (practice_data_opioidper1000): {len(opioids[~mask].loc['practice_data_opioidper1000',:])}" )
+print( f"Number of practices that we identify as open AND with a small list size (practice_data_opioidspercent): {len(opioids[~mask].loc['practice_data_opioidspercent',:])}" )
+
 opioids = opioids.loc[~mask]
-print(len(opioids))
-opioids.head()
+
+
+# +
+#print(len(opioids))
+#opioids.head()
+# -
+
+len(opioids.loc["practice_data_opioidome",:])
 
 # # Results
 # These are filtered:
@@ -98,9 +135,13 @@ filtered_sparkline(opioids,
 
 # https://openprescribing.net/measure/opioidspercent
 
+
+
 filtered_sparkline(opioids,
                    'practice_data_opioid/practice_data_opioidspercent',
                    'practice_data_opioidspercent')
+
+
 
 # ## High dose opioids per 1000 patients
 
