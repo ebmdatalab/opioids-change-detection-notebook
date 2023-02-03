@@ -43,6 +43,8 @@ opioids_class.run()
 opioids = opioids_class.concatenate_outputs()
 opioids.head()
 
+opioids.reset_index().name.nunique()
+
 # ### Get list to filter out closed practices
 
 query = """
