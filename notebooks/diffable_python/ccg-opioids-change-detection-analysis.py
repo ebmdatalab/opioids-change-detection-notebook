@@ -41,6 +41,11 @@ opioids_class.run()
 opioids = opioids_class.concatenate_outputs()
 opioids.head()
 
+# +
+opioids.reset_index().name.nunique()
+# -
+
+
 # # Results
 # These are filtered:
 # - to only include CCGs that started within the highest 20% of all CCGs
