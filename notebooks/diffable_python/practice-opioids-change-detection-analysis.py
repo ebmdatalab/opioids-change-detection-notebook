@@ -82,18 +82,27 @@ opioids_saved = opioids
 opioids.index.get_level_values(0).unique()
 
 #print(len(opioids))
-print(f"practice_data_opioidome: {len(opioids.loc['practice_data_opioidome',:])}")
-print(f"practice_data_opioidper1000: {len(opioids.loc['practice_data_opioidper1000',:])}")
-print(f"practice_data_opioidspercent: {len(opioids.loc['practice_data_opioidspercent',:])}")
+print(f"practice_data_opioidome: {opioids.loc['practice_data_opioidome',:].reset_index().name.nunique()}")
+print(f"practice_data_opioidper1000: {opioids.loc['practice_data_opioidper1000',:].reset_index().name.nunique()}")
+print(f"practice_data_opioidspercent: {opioids.loc['practice_data_opioidspercent',:].reset_index().name.nunique()}")
+print(f"across all three: {opioids.reset_index().name.nunique()}")
+
 
 # +
 
 mask = opioids.index.get_level_values(1).isin(open_practices['code'])
 print( f"Number of open practices (from input file): {open_practices.size}" )
-print( f"Number of practices that we identify as open (practice_data_opioidome): {len(opioids[mask].loc['practice_data_opioidome',:])}" )
-print( f"Number of practices that we identify as open (practice_data_opioidper1000): {len(opioids[mask].loc['practice_data_opioidper1000',:])}" )
-print( f"Number of practices that we identify as open (practice_data_opioidspercent): {len(opioids[mask].loc['practice_data_opioidspercent',:])}" )
+# print( f"Number of practices that we identify as open (practice_data_opioidome): {len(opioids[mask].loc['practice_data_opioidome',:])}" )
+# print( f"Number of practices that we identify as open (practice_data_opioidper1000): {len(opioids[mask].loc['practice_data_opioidper1000',:])}" )
+# print( f"Number of practices that we identify as open (practice_data_opioidspercent): {len(opioids[mask].loc['practice_data_opioidspercent',:])}" )
 
+#print(len(opioids))
+print(f"practice_data_opioidome: {opioids[mask].loc['practice_data_opioidome',:].reset_index().name.nunique()}")
+print(f"practice_data_opioidper1000: {opioids[mask].loc['practice_data_opioidper1000',:].reset_index().name.nunique()}")
+print(f"practice_data_opioidspercent: {opioids[mask].loc['practice_data_opioidspercent',:].reset_index().name.nunique()}")
+print(f"across all three: {opioids[mask].reset_index().name.nunique()}")
+
+closed_mask = ~mask
 # -
 
 opioids = opioids.loc[mask]
@@ -103,11 +112,18 @@ opioids = opioids.loc[mask]
 # +
 mask = opioids.index.get_level_values(1).isin(small_list_size['practice'])
 print( f"Number of small practices (from input file): {small_list_size.size}" )
-print( f"Number of practices that we identify as open AND with a small list size (practice_data_opioidome): {len(opioids[~mask].loc['practice_data_opioidome',:])}" )
-print( f"Number of practices that we identify as open AND with a small list size (practice_data_opioidper1000): {len(opioids[~mask].loc['practice_data_opioidper1000',:])}" )
-print( f"Number of practices that we identify as open AND with a small list size (practice_data_opioidspercent): {len(opioids[~mask].loc['practice_data_opioidspercent',:])}" )
+# print( f"Number of practices that we identify as open AND with a small list size (practice_data_opioidome): {len(opioids[~mask].loc['practice_data_opioidome',:])}" )
+# print( f"Number of practices that we identify as open AND with a small list size (practice_data_opioidper1000): {len(opioids[~mask].loc['practice_data_opioidper1000',:])}" )
+# print( f"Number of practices that we identify as open AND with a small list size (practice_data_opioidspercent): {len(opioids[~mask].loc['practice_data_opioidspercent',:])}" )
+
+print(f"practice_data_opioidome: {opioids[~mask].loc['practice_data_opioidome',:].reset_index().name.nunique()}")
+print(f"practice_data_opioidper1000: {opioids[~mask].loc['practice_data_opioidper1000',:].reset_index().name.nunique()}")
+print(f"practice_data_opioidspercent: {opioids[~mask].loc['practice_data_opioidspercent',:].reset_index().name.nunique()}")
+print(f"across all three: {opioids[~mask].reset_index().name.nunique()}")
 
 opioids = opioids.loc[~mask]
+
+small_mask = mask
 
 # -
 
