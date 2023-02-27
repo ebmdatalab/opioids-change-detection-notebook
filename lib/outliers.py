@@ -158,18 +158,18 @@ def filtered_sparkline(df, name, measure):
     filtered = df.loc[measure]
     
     #pick entities that start high
-    mask = filtered['is.intlev.initlev'] > filtered['is.intlev.initlev'].quantile(0.8)
-    filtered = filtered.loc[mask]
+    #mask = filtered['is.intlev.initlev'] > filtered['is.intlev.initlev'].quantile(0.8)
+    #filtered = filtered.loc[mask]
     
     #remove entities with a big spike
-    mean_std_max = data['rate'].groupby(['code']).agg(['mean','std','max'])
-    mask = mean_std_max['max'] < (mean_std_max['mean'] + (1.96*mean_std_max['std']))
-    filtered = filtered.loc[mask]
+    #mean_std_max = data['rate'].groupby(['code']).agg(['mean','std','max'])
+    #mask = mean_std_max['max'] < (mean_std_max['mean'] + (1.96*mean_std_max['std']))
+    #filtered = filtered.loc[mask]
     
     #drop duplicates
-    filtered = filtered.loc[~filtered.index.duplicated(keep='first')]
+    #filtered = filtered.loc[~filtered.index.duplicated(keep='first')]
     
-    filtered = filtered.sort_values('is.intlev.levdprop', ascending=False).head(10)
+    #filtered = filtered.sort_values('is.intlev.levdprop', ascending=False).head(10)
     plot_series = sparkline_table(data, 'rate', subset=filtered.index)
 
     #get entity names and turn into link
